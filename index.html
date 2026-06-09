@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>請求書ジェネレータ</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ━━ 左：入力フォーム ━━ -->
+    <div class="form-panel">
+      <h1 class="app-title">請求書ジェネレータ</h1>
+
+      <!-- 請求書情報 -->
+      <section class="form-section">
+        <h2 class="section-title">請求書情報</h2>
+        <div class="form-row">
+          <label for="invoiceNumber">請求書番号</label>
+          <input type="text" id="invoiceNumber">
+        </div>
+        <div class="form-row">
+          <label for="issueDate">発行日</label>
+          <input type="date" id="issueDate">
+        </div>
+        <div class="form-row">
+          <label for="dueDate">支払期限</label>
+          <input type="date" id="dueDate">
+        </div>
+      </section>
+
+      <!-- 発行者情報 -->
+      <section class="form-section">
+        <h2 class="section-title">発行者情報（自社）</h2>
+        <div class="form-row">
+          <label for="issuerName">会社名</label>
+          <input type="text" id="issuerName" placeholder="株式会社サンプル">
+        </div>
+        <div class="form-row">
+          <label for="issuerAddress">住所</label>
+          <input type="text" id="issuerAddress" placeholder="東京都渋谷区〇〇1-2-3">
+        </div>
+        <div class="form-row">
+          <label for="issuerPhone">電話番号</label>
+          <input type="text" id="issuerPhone" placeholder="03-0000-0000">
+        </div>
+        <div class="form-row">
+          <label for="issuerEmail">メール</label>
+          <input type="email" id="issuerEmail" placeholder="info@example.com">
+        </div>
+        <div class="form-row">
+          <label for="bankInfo">振込先</label>
+          <input type="text" id="bankInfo" placeholder="〇〇銀行 △△支店 普通 1234567">
+        </div>
+      </section>
+
+      <!-- 請求先情報 -->
+      <section class="form-section">
+        <h2 class="section-title">請求先情報</h2>
+        <div class="form-row">
+          <label for="recipientName">会社名/氏名</label>
+          <input type="text" id="recipientName" placeholder="〇〇株式会社">
+        </div>
+        <div class="form-row">
+          <label for="recipientAddress">住所</label>
+          <input type="text" id="recipientAddress" placeholder="大阪府大阪市〇〇1-2-3">
+        </div>
+      </section>
+
+      <!-- 明細 -->
+      <section class="form-section">
+        <h2 class="section-title">明細</h2>
+        <div class="items-table-wrapper">
+          <table class="items-form-table">
+            <thead>
+              <tr>
+                <th>品目</th>
+                <th>数量</th>
+                <th>単位</th>
+                <th>単価（円）</th>
+                <th>金額</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+        <button id="addItemBtn" class="btn btn-secondary">＋ 行を追加</button>
+      </section>
+
+      <!-- 消費税・合計 -->
+      <section class="form-section">
+        <h2 class="section-title">消費税・合計</h2>
+        <div class="form-row">
+          <label for="taxRate">消費税率</label>
+          <select id="taxRate">
+            <option value="0">0%</option>
+            <option value="8">8%</option>
+            <option value="10" selected>10%</option>
+          </select>
+        </div>
+        <div class="totals-display">
+          <div class="total-row"><span>小計</span><span id="displaySubtotal">¥0</span></div>
+          <div class="total-row"><span>消費税</span><span id="displayTax">¥0</span></div>
+          <div class="total-row total-final"><span>合計</span><span id="displayTotal">¥0</span></div>
+        </div>
+      </section>
+
+      <!-- 備考 -->
+      <section class="form-section">
+        <h2 class="section-title">備考</h2>
+        <textarea id="notes" rows="3" placeholder="支払条件・その他備考など"></textarea>
+      </section>
+
+      <!-- アクションボタン -->
+      <div class="action-buttons">
+        <button id="excelBtn" class="btn btn-primary">📊 Excel出力</button>
+        <button id="pdfBtn" class="btn btn-primary">🖨 PDF出力</button>
+        <button id="clearBtn" class="btn btn-danger">クリア</button>
+      </div>
+    </div>
+
+    <!-- ━━ 右：プレビュー ━━ -->
+    <div class="preview-panel">
+      <div class="preview-header">プレビュー（A4）</div>
+      <div class="preview-scroll">
+        <div id="invoicePreview" class="invoice-preview"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script src="excel.js"></script>
+  <script src="pdf.js"></script>
+</body>
+</html>
